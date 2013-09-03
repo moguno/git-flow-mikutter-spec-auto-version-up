@@ -1,0 +1,50 @@
+#! /opt/local/bin/ruby1.9
+# -*- coding: utf-8 -*-
+
+require 'yaml'
+
+YAML::ENGINE.yamler = 'psych'
+
+def get_current_branch()
+  branches = `git branch`
+
+  branches.split("\n").select { |a| a  =~ /^\*/ }.map { |a| a.sub(/^\* /, "") }.first
+end
+
+def get_version(branch)
+  if branch =~ /\//
+    branch =~ /([^\/]+)$/
+    result = $1
+  else
+    result = branch.sub(/^\* /, "")
+  end
+
+  result
+end
+
+
+if ARGV[2] != "1"
+  exit
+end
+
+if !File.exist?("spec")
+  exit
+end
+
+
+branch = get_current_branch
+
+if !(branch =~ /^release\//)
+  exit
+end
+
+spec = YAML.load(File.open("spec"))
+version = get_version(branch)
+
+spec["version"] = version
+
+File.open("spec", "w") { |fp|
+  fp.puts(YAML.dump(spec))
+}
+
+puts "specファイルのバージョンを#{version}に更新しときました。"
