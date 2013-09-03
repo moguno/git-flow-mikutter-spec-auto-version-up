@@ -36,3 +36,5 @@ author: moguno
 name: mikutter RSS TL
 description: ホームタイムラインにRSSフィードを混ぜ込みます。
 </pre>
+
+あ、シェバング（1行目のアレ）はMacPortsで入れたRuby1.9に特化しているので、適宜書き換えてください。
